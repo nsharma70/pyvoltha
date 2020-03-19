@@ -394,10 +394,6 @@ class KafkaProxy(object):
     def register_alive_state_update(self, defer_handler):
         self.alive_state_handler = defer_handler
 
-    #def is_alive(self):
-       # log.debug('kafka-get-liveliness')
-       # return self.alive
-
     def is_faulty(self):
         return self.faulty
 
