@@ -352,7 +352,7 @@ class KafkaProxy(object):
                 # Using 2 seconds timeout for heartbeat producer; default of 5 minutes is too long
                 self.kproducer_heartbeat = _kafkaProducer(
                     {'bootstrap.servers': _k_endpoint,
-                     'default.topic.config' : {'message.timeout.ms': 20000},
+                     'default.topic.config' : {'message.timeout.ms': 2000},
                     }
                 )
 
