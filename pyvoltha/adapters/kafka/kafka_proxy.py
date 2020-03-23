@@ -313,6 +313,7 @@ class KafkaProxy(object):
 
         except Exception as e:
             self.faulty = True
+            log.info('Invoke callback to notify updated faulty status')
             self.alive_state_handler.callback(self.alive)
             log.error('failed-to-send-kafka-msg', topic=topic,
                       e=e)
@@ -360,7 +361,6 @@ class KafkaProxy(object):
             msgs = [msg]
 
             self.kproducer_heartbeat.produce(topic, msg, callback=self.handle_kafka_delivery_report)
-            log.debug('sent-kafka-heartbeat-message', topic=topic)
 
         except Exception as e:
             self.faulty = True
@@ -370,15 +370,12 @@ class KafkaProxy(object):
     def check_heartbeat_delivery(self):
         try:
             if self.kproducer_heartbeat is not None:
-                log.debug('check-heartbeat-delivery')
                 msg = self.kproducer_heartbeat.poll(0)
-                log.debug('poll-returns', msg=msg)
         except Exception as e:
             log.error('failed-to-check-heartbeat-msg-delivery', e=e)
             self.faulty = True
 
     def handle_kafka_delivery_report(self, err, msg):
-        log.debug('handle-kafka-delivery-report')
         if err is not None :
             # Log and notify only in event of alive status change
             if self.alive is True:
